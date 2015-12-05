@@ -1,12 +1,9 @@
 ﻿using ICities;
 using System.Collections.Generic;
-using ColossalFramework;
-using UnityEngine;
-using System.Reflection;
 
 namespace EmployOvereducatedWorkers
 {
-	public class ModInfo : IUserMod
+    public class ModInfo : IUserMod
 	{
 		public string MODNAME = "Employ Overeducated Workers";
 
