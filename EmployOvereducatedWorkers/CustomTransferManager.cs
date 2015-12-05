@@ -351,82 +351,89 @@ public class CustomTransferManager : SimulationManagerBase<TransferManager, Tran
                     TransferManager.TransferOffer mIncomingOffers = m_incomingOffers[num * 256 + num1];//優先度iの求人票num1番目
                     Vector3 position = mIncomingOffers.Position;
                     int amount = mIncomingOffers.Amount; //その求人票の求人数
+
+                    TransferManager.TransferReason material2 = material;
                     do
                     {
-                        int num3 = Mathf.Max(0, 2 - i);//7→0 6→0 2→0 1→1 0→2
-                        int num4 = -1;
-                        int num5 = -1;
-                        float single3 = -1f;
-                        int num6 = num2;
-                        int num7 = i;
-                        while (num7 >= num3)
+                        do
                         {
-                            int num8 = (int)material * 8 + num7;
-                            int mOutgoingCount1 = m_outgoingCount[num8];//求職者を優先度iから順に見ていく（優先度が低い求人票は優先度が高い求職者とマッチングしない？）
-                            float single4 = (float)num7 + 0.1f;
-                            if (single3 < single4)
+                            int num3 = Mathf.Max(0, 2 - i);
+                            int num4 = -1;
+                            int num5 = -1;
+                            float single3 = -1f;
+                            int num6 = num2;
+                            int num7 = i;
+                            while (num7 >= num3)
                             {
-                                for (int j = num6; j < mOutgoingCount1; j++)
+                                int num8 = (int)material2 * 8 + num7;
+                                int mOutgoingCount1 = m_outgoingCount[num8];//求職者を優先度iから順に見ていく
+                                float single4 = (float)num7 + 0.1f;
+                                if (single3 < single4)
                                 {
-                                    TransferManager.TransferOffer mOutgoingOffers = m_outgoingOffers[num8 * 256 + j];
-                                    float single5 = Vector3.SqrMagnitude(mOutgoingOffers.Position - position);
-                                    single1 = (distanceMultiplier >= 0f ? single4 / (1f + single5 * distanceMultiplier) : single4 - single4 / (1f - single5 * distanceMultiplier));
-                                    if (single1 > single3)
+                                    for (int j = num6; j < mOutgoingCount1; j++)
                                     {
-                                        num4 = num7;
-                                        num5 = j;
-                                        single3 = single1;
-                                        if (single5 < single)
+                                        TransferManager.TransferOffer mOutgoingOffers = m_outgoingOffers[num8 * 256 + j];
+                                        float single5 = Vector3.SqrMagnitude(mOutgoingOffers.Position - position);
+                                        single1 = (distanceMultiplier >= 0f ? single4 / (1f + single5 * distanceMultiplier) : single4 - single4 / (1f - single5 * distanceMultiplier));
+                                        if (single1 > single3)
                                         {
-                                            break;
+                                            num4 = num7;
+                                            num5 = j;
+                                            single3 = single1;
+                                            if (single5 < single)
+                                            {
+                                                break;
+                                            }
                                         }
                                     }
+                                    num6 = 0;
+                                    num7--;
                                 }
-                                num6 = 0;
-                                num7--;
-                            }
-                            else
-                            {
-                                break;
-                            }
-                        }
-                        if (num4 == -1)
-                        {
-                            break;//マッチング失敗
-                        }
-                        else
-                        {
-                            //マッチング成功、後処理
-                            int num9 = (int)material * 8 + num4;
-                            TransferManager.TransferOffer transferOffer = m_outgoingOffers[num9 * 256 + num5];
-                            int amount1 = transferOffer.Amount;
-                            int num10 = Mathf.Min(amount, amount1);//マッチングした数
-                            if (num10 != 0)
-                            {
-                                StartTransfer(material, transferOffer, mIncomingOffers);
-                            }
-                            amount = amount - num10;//求人票の残りの数
-                            amount1 = amount1 - num10;//求職者の残りの数
-                            if (amount1 != 0)
-                            {
-                                //求職者の残りの数をセット
-                                transferOffer.Amount = amount1;
-                                m_outgoingOffers[num9 * 256 + num5] = transferOffer;
-                            }
-                            else
-                            {
-                                int mOutgoingCount2 = m_outgoingCount[num9] - 1;
-                                m_outgoingCount[num9] = (ushort)mOutgoingCount2;
-                                m_outgoingOffers[num9 * 256 + num5] = m_outgoingOffers[num9 * 256 + mOutgoingCount2];
-                                if (num9 == num)
+                                else
                                 {
-                                    mOutgoingCount = mOutgoingCount2;
+                                    break;
                                 }
                             }
-                            mIncomingOffers.Amount = amount;
+                            if (num4 == -1)
+                            {
+                                break;//マッチング失敗
+                            }
+                            else
+                            {
+                                //マッチング成功、後処理
+                                int num9 = (int)material2 * 8 + num4;
+                                TransferManager.TransferOffer transferOffer = m_outgoingOffers[num9 * 256 + num5];
+                                int amount1 = transferOffer.Amount;
+                                int num10 = Mathf.Min(amount, amount1);//マッチングした数
+                                if (num10 != 0)
+                                {
+                                    StartTransfer(material, transferOffer, mIncomingOffers);
+                                }
+                                amount = amount - num10;//求人票の残りの数
+                                amount1 = amount1 - num10;//求職者の残りの数
+                                if (amount1 != 0)
+                                {
+                                    //求職者の残りの数をセット
+                                    transferOffer.Amount = amount1;
+                                    m_outgoingOffers[num9 * 256 + num5] = transferOffer;
+                                }
+                                else
+                                {
+                                    int mOutgoingCount2 = m_outgoingCount[num9] - 1;
+                                    m_outgoingCount[num9] = (ushort)mOutgoingCount2;
+                                    m_outgoingOffers[num9 * 256 + num5] = m_outgoingOffers[num9 * 256 + mOutgoingCount2];
+                                    if (num9 == num)
+                                    {
+                                        mOutgoingCount = mOutgoingCount2;
+                                    }
+                                }
+                                mIncomingOffers.Amount = amount;
+                            }
                         }
-                    }
-                    while (amount != 0);
+                        while (amount != 0);
+                        if (amount == 0 || material2 < TransferManager.TransferReason.Worker0 || TransferManager.TransferReason.Worker3 <= material2) break;
+                        material2++;
+                    } while (true);
                     if (amount != 0)
                     {
                         //求人票の残りの数をセット
@@ -448,81 +455,89 @@ public class CustomTransferManager : SimulationManagerBase<TransferManager, Tran
                 TransferManager.TransferOffer mOutgoingOffers1 = m_outgoingOffers[num * 256 + num2];//優先度iの求職者num2番目
                 Vector3 vector3 = mOutgoingOffers1.Position;
                 int amount2 = mOutgoingOffers1.Amount;
+
+                TransferManager.TransferReason material3 = material;
                 do
                 {
-                    int num11 = Mathf.Max(0, 2 - i);//7→0 6→0 2→0 1→1 0→2
-                    int num12 = -1;
-                    int num13 = -1;
-                    float single6 = -1f;
-                    int num14 = num1;
-                    int num15 = i;
-                    while (num15 >= num11)
+                    do
                     {
-                        int num16 = (int)material * 8 + num15;
-                        int mIncomingCount1 = m_incomingCount[num16];//求人票を優先度iから順に見ていく（優先度が低い求人票は優先度が高い求職者とマッチングしない？）
-                        float single7 = (float)num15 + 0.1f;
-                        if (single6 < single7)
+                        int num11 = Mathf.Max(0, 2 - i);
+                        int num12 = -1;
+                        int num13 = -1;
+                        float single6 = -1f;
+                        int num14 = num1;
+                        int num15 = i;
+                        while (num15 >= num11)
                         {
-                            for (int k = num14; k < mIncomingCount1; k++)
+                            int num16 = (int)material3 * 8 + num15;
+                            int mIncomingCount1 = m_incomingCount[num16];//求人票を優先度iから順に見ていく
+                            float single7 = (float)num15 + 0.1f;
+                            if (single6 < single7)
                             {
-                                TransferManager.TransferOffer mIncomingOffers1 = m_incomingOffers[num16 * 256 + k];
-                                float single8 = Vector3.SqrMagnitude(mIncomingOffers1.Position - vector3);
-                                single2 = (distanceMultiplier >= 0f ? single7 / (1f + single8 * distanceMultiplier) : single7 - single7 / (1f - single8 * distanceMultiplier));
-                                if (single2 > single6)
+                                for (int k = num14; k < mIncomingCount1; k++)
                                 {
-                                    num12 = num15;
-                                    num13 = k;
-                                    single6 = single2;
-                                    if (single8 < single)
+                                    TransferManager.TransferOffer mIncomingOffers1 = m_incomingOffers[num16 * 256 + k];
+                                    float single8 = Vector3.SqrMagnitude(mIncomingOffers1.Position - vector3);
+                                    single2 = (distanceMultiplier >= 0f ? single7 / (1f + single8 * distanceMultiplier) : single7 - single7 / (1f - single8 * distanceMultiplier));
+                                    if (single2 > single6)
                                     {
-                                        break;
+                                        num12 = num15;
+                                        num13 = k;
+                                        single6 = single2;
+                                        if (single8 < single)
+                                        {
+                                            break;
+                                        }
                                     }
                                 }
+                                num14 = 0;
+                                num15--;
                             }
-                            num14 = 0;
-                            num15--;
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-                    if (num12 == -1)
-                    {
-                        break;//マッチング失敗
-                    }
-                    else
-                    {
-                        //マッチング成功、後処理
-                        int num17 = (int)material * 8 + num12;
-                        TransferManager.TransferOffer transferOffer1 = m_incomingOffers[num17 * 256 + num13];
-                        int amount3 = transferOffer1.Amount;
-                        int num18 = Mathf.Min(amount2, amount3);
-                        if (num18 != 0)
-                        {
-                            StartTransfer(material, mOutgoingOffers1, transferOffer1);
-                        }
-                        amount2 = amount2 - num18;
-                        amount3 = amount3 - num18;
-                        if (amount3 != 0)
-                        {
-                            transferOffer1.Amount = amount3;
-                            m_incomingOffers[num17 * 256 + num13] = transferOffer1;
-                        }
-                        else
-                        {
-                            int mIncomingCount2 = m_incomingCount[num17] - 1;
-                            m_incomingCount[num17] = (ushort)mIncomingCount2;
-                            m_incomingOffers[num17 * 256 + num13] = m_incomingOffers[num17 * 256 + mIncomingCount2];
-                            if (num17 == num)
+                            else
                             {
-                                mIncomingCount = mIncomingCount2;
+                                break;
                             }
                         }
-                        mOutgoingOffers1.Amount = amount2;
+                        if (num12 == -1)
+                        {
+                            break;//マッチング失敗
+                        }
+                        else
+                        {
+                            //マッチング成功、後処理
+                            int num17 = (int)material3 * 8 + num12;
+                            TransferManager.TransferOffer transferOffer1 = m_incomingOffers[num17 * 256 + num13];
+                            int amount3 = transferOffer1.Amount;
+                            int num18 = Mathf.Min(amount2, amount3);
+                            if (num18 != 0)
+                            {
+                                StartTransfer(material, mOutgoingOffers1, transferOffer1);
+                            }
+                            amount2 = amount2 - num18;
+                            amount3 = amount3 - num18;
+                            if (amount3 != 0)
+                            {
+                                transferOffer1.Amount = amount3;
+                                m_incomingOffers[num17 * 256 + num13] = transferOffer1;
+                            }
+                            else
+                            {
+                                int mIncomingCount2 = m_incomingCount[num17] - 1;
+                                m_incomingCount[num17] = (ushort)mIncomingCount2;
+                                m_incomingOffers[num17 * 256 + num13] = m_incomingOffers[num17 * 256 + mIncomingCount2];
+                                if (num17 == num)
+                                {
+                                    mIncomingCount = mIncomingCount2;
+                                }
+                            }
+                            mOutgoingOffers1.Amount = amount2;
+                        }
                     }
-                }
-                while (amount2 != 0);
+                    while (amount2 != 0);
+                    
+                    if (amount2 == 0 || material3 <= TransferManager.TransferReason.Worker0 || TransferManager.TransferReason.Worker3 < material3) break;
+                    material3--;
+                } while (true);
                 if (amount2 != 0)
                 {
                     mOutgoingOffers1.Amount = amount2;

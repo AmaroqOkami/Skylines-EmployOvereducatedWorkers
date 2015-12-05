@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using ColossalFramework;
 using UnityEngine;
 using System.Reflection;
-using TrafficManager_ImprovedAI.Extensions;
 
 namespace EmployOvereducatedWorkers
 {
@@ -53,8 +52,8 @@ namespace EmployOvereducatedWorkers
     
     public sealed class LoadingExtension : LoadingExtensionBase
     {
-        public static LoadingExtension Instance = null;
-        public bool detourInited = false;
+        //public static LoadingExtension Instance = null;
+        //public bool detourInited = false;
         List<RedirectCallsState> m_redirectionStates = new List<RedirectCallsState>();
 
         public override void OnLevelLoaded(LoadMode mode)
@@ -65,10 +64,10 @@ namespace EmployOvereducatedWorkers
                 //ReplaceTransferManager();
                 RedirectionHelper.RedirectCalls(m_redirectionStates, typeof(TransferManager), typeof(CustomTransferManager), "MatchOffers", 1);
                 //RedirectionHelper.RedirectCalls(m_redirectionStates, typeof(CustomTransferManager), typeof(TransferManager), "StartTransfer", 3);
-                if (Instance == null)
-                {
-                    Instance = this;
-                }
+                //if (Instance == null)
+                //{
+                //    Instance = this;
+                //}
             }
         }
 
