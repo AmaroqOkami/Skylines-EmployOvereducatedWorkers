@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class CustomTransferManager : SimulationManagerBase<TransferManager, TransferProperties>, ISimulationManager
 {
-    private void GetDatas()
+    private void GetParams()
     {
         var inst = Singleton<TransferManager>.instance;
         var incomingCount = typeof(TransferManager).GetField("m_incomingCount", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -29,7 +29,7 @@ public class CustomTransferManager : SimulationManagerBase<TransferManager, Tran
         m_outgoingAmount = outgoingAmount.GetValue(inst) as int[];
     }
 
-    private void SetDatas()
+    private void SetParams()
     {
         var inst = Singleton<TransferManager>.instance;
         var incomingCount = typeof(TransferManager).GetField("m_incomingCount", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -64,269 +64,152 @@ public class CustomTransferManager : SimulationManagerBase<TransferManager, Tran
 
     private int[] m_incomingAmount;
 
-    private float GetDistanceMultiplier(TransferManager.TransferReason material)
+    private static float GetDistanceMultiplier(TransferManager.TransferReason material)
     {
         switch (material)
         {
             case TransferManager.TransferReason.Garbage:
-                {
-                    return 5E-07f;
-                }
+                return 5E-07f;
             case TransferManager.TransferReason.Crime:
-                {
-                    return 1E-05f;
-                }
+                return 1E-05f;
             case TransferManager.TransferReason.Sick:
-                {
-                    return 1E-06f;
-                }
+                return 1E-06f;
             case TransferManager.TransferReason.Dead:
-                {
-                    return 1E-05f;
-                }
+                return 1E-05f;
             case TransferManager.TransferReason.Worker0:
-                {
-                    return 1E-07f;
-                }
+                return 1E-07f;
             case TransferManager.TransferReason.Worker1:
-                {
-                    return 1E-07f;
-                }
+                return 1E-07f;
             case TransferManager.TransferReason.Worker2:
-                {
-                    return 1E-07f;
-                }
+                return 1E-07f;
             case TransferManager.TransferReason.Worker3:
-                {
-                    return 1E-07f;
-                }
+                return 1E-07f;
             case TransferManager.TransferReason.Student1:
-                {
-                    return 2E-07f;
-                }
+                return 2E-07f;
             case TransferManager.TransferReason.Student2:
-                {
-                    return 2E-07f;
-                }
+                return 2E-07f;
             case TransferManager.TransferReason.Student3:
-                {
-                    return 2E-07f;
-                }
+                return 2E-07f;
             case TransferManager.TransferReason.Fire:
-                {
-                    return 1E-05f;
-                }
+                return 1E-05f;
             case TransferManager.TransferReason.Bus:
-                {
-                    return 1E-05f;
-                }
+                return 1E-05f;
             case TransferManager.TransferReason.Oil:
-                {
-                    return 1E-07f;
-                }
+                return 1E-07f;
             case TransferManager.TransferReason.Ore:
-                {
-                    return 1E-07f;
-                }
+                return 1E-07f;
             case TransferManager.TransferReason.Logs:
-                {
-                    return 1E-07f;
-                }
+                return 1E-07f;
             case TransferManager.TransferReason.Grain:
-                {
-                    return 1E-07f;
-                }
+                return 1E-07f;
             case TransferManager.TransferReason.Goods:
-                {
-                    return 1E-07f;
-                }
+                return 1E-07f;
             case TransferManager.TransferReason.PassengerTrain:
-                {
-                    return 1E-05f;
-                }
+                return 1E-05f;
             case TransferManager.TransferReason.Coal:
-                {
-                    return 1E-07f;
-                }
+                return 1E-07f;
             case TransferManager.TransferReason.Family0:
-                {
-                    return 1E-08f;
-                }
+                return 1E-08f;
             case TransferManager.TransferReason.Family1:
-                {
-                    return 1E-08f;
-                }
+                return 1E-08f;
             case TransferManager.TransferReason.Family2:
-                {
-                    return 1E-08f;
-                }
+                return 1E-08f;
             case TransferManager.TransferReason.Family3:
-                {
-                    return 1E-08f;
-                }
+                return 1E-08f;
             case TransferManager.TransferReason.Single0:
-                {
-                    return 1E-08f;
-                }
+                return 1E-08f;
             case TransferManager.TransferReason.Single1:
-                {
-                    return 1E-08f;
-                }
+                return 1E-08f;
             case TransferManager.TransferReason.Single2:
-                {
-                    return 1E-08f;
-                }
+                return 1E-08f;
             case TransferManager.TransferReason.Single3:
-                {
-                    return 1E-08f;
-                }
+                return 1E-08f;
             case TransferManager.TransferReason.PartnerYoung:
-                {
-                    return 1E-08f;
-                }
+                return 1E-08f;
             case TransferManager.TransferReason.PartnerAdult:
-                {
-                    return 1E-08f;
-                }
+                return 1E-08f;
             case TransferManager.TransferReason.Shopping:
-                {
-                    return 2E-07f;
-                }
+                return 2E-07f;
             case TransferManager.TransferReason.Petrol:
-                {
-                    return 1E-07f;
-                }
+                return 1E-07f;
             case TransferManager.TransferReason.Food:
-                {
-                    return 1E-07f;
-                }
+                return 1E-07f;
             case TransferManager.TransferReason.LeaveCity0:
-                {
-                    return 1E-08f;
-                }
+                return 1E-08f;
             case TransferManager.TransferReason.LeaveCity1:
-                {
-                    return 1E-08f;
-                }
+                return 1E-08f;
             case TransferManager.TransferReason.LeaveCity2:
-                {
-                    return 1E-08f;
-                }
+                return 1E-08f;
             case TransferManager.TransferReason.Entertainment:
-                {
-                    return 2E-07f;
-                }
+                return 2E-07f;
             case TransferManager.TransferReason.Lumber:
-                {
-                    return 1E-07f;
-                }
+                return 1E-07f;
             case TransferManager.TransferReason.GarbageMove:
-                {
-                    return 5E-07f;
-                }
+                return 5E-07f;
             case TransferManager.TransferReason.MetroTrain:
-                {
-                    return 1E-05f;
-                }
+                return 1E-05f;
             case TransferManager.TransferReason.PassengerPlane:
-                {
-                    return 1E-05f;
-                }
+                return 1E-05f;
             case TransferManager.TransferReason.PassengerShip:
-                {
-                    return 1E-05f;
-                }
+                return 1E-05f;
             case TransferManager.TransferReason.DeadMove:
-                {
-                    return 5E-07f;
-                }
+                return 5E-07f;
             case TransferManager.TransferReason.DummyCar:
-                {
-                    return -1E-08f;
-                }
+                return -1E-08f;
             case TransferManager.TransferReason.DummyTrain:
-                {
-                    return -1E-08f;
-                }
+                return -1E-08f;
             case TransferManager.TransferReason.DummyShip:
-                {
-                    return -1E-08f;
-                }
+                return -1E-08f;
             case TransferManager.TransferReason.DummyPlane:
-                {
-                    return -1E-08f;
-                }
+                return -1E-08f;
             case TransferManager.TransferReason.Single0B:
-                {
-                    return 1E-08f;
-                }
+                return 1E-08f;
             case TransferManager.TransferReason.Single1B:
-                {
-                    return 1E-08f;
-                }
+                return 1E-08f;
             case TransferManager.TransferReason.Single2B:
-                {
-                    return 1E-08f;
-                }
+                return 1E-08f;
             case TransferManager.TransferReason.Single3B:
-                {
-                    return 1E-08f;
-                }
+                return 1E-08f;
             case TransferManager.TransferReason.ShoppingB:
-                {
-                    return 2E-07f;
-                }
+                return 2E-07f;
             case TransferManager.TransferReason.ShoppingC:
-                {
-                    return 2E-07f;
-                }
+                return 2E-07f;
             case TransferManager.TransferReason.ShoppingD:
-                {
-                    return 2E-07f;
-                }
+                return 2E-07f;
             case TransferManager.TransferReason.ShoppingE:
-                {
-                    return 2E-07f;
-                }
+                return 2E-07f;
             case TransferManager.TransferReason.ShoppingF:
-                {
-                    return 2E-07f;
-                }
+                return 2E-07f;
             case TransferManager.TransferReason.ShoppingG:
-                {
-                    return 2E-07f;
-                }
+                return 2E-07f;
             case TransferManager.TransferReason.ShoppingH:
-                {
-                    return 2E-07f;
-                }
+                return 2E-07f;
             case TransferManager.TransferReason.EntertainmentB:
-                {
-                    return 2E-07f;
-                }
+                return 2E-07f;
             case TransferManager.TransferReason.EntertainmentC:
-                {
-                    return 2E-07f;
-                }
+                return 2E-07f;
             case TransferManager.TransferReason.EntertainmentD:
-                {
-                    return 2E-07f;
-                }
+                return 2E-07f;
             case TransferManager.TransferReason.Taxi:
-                {
-                    return 1E-05f;
-                }
+                return 1E-05f;
             case TransferManager.TransferReason.CriminalMove:
-                {
-                    return 5E-07f;
-                }
+                return 5E-07f;
+            case TransferManager.TransferReason.Tram:
+                return 1E-05f;
+            case TransferManager.TransferReason.Snow:
+                return 5E-07f;
+            case TransferManager.TransferReason.SnowMove:
+                return 5E-07f;
+            case TransferManager.TransferReason.RoadMaintenance:
+                return 5E-07f;
+            default:
+                return 1E-07f;
         }
-        return 1E-07f;
     }
 
     private void MatchOffers(TransferManager.TransferReason material)
     {
-        GetDatas();
+        GetParams();
         
         float single;
         float single1;
@@ -561,7 +444,7 @@ public class CustomTransferManager : SimulationManagerBase<TransferManager, Tran
         m_incomingAmount[(int)material] = 0;
         m_outgoingAmount[(int)material] = 0;
 
-        SetDatas();
+        SetParams();
     }
 
     private static void StartTransfer(TransferManager.TransferReason material, TransferManager.TransferOffer offerOut, TransferManager.TransferOffer offerIn)
